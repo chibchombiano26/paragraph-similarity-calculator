@@ -1,7 +1,8 @@
-import { ChakraProvider, Box, Heading, Text, Button, Flex, Input, Spinner, Textarea } from "@chakra-ui/react";
+import { ChakraProvider, Box, Heading, Text, Button, Textarea } from "@chakra-ui/react";
 import { Pipeline, pipeline, cos_sim } from '@xenova/transformers';
 import { useEffect, useRef, useState } from "react";
-import { Stack, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
+import lottie from 'lottie-web';
 
 
 const useCompareParagraphs = () => {
@@ -49,17 +50,33 @@ const useCompareParagraphs = () => {
   return { loadingModel, calculateSimilarity, paragraphs, setParagraphs };
 }
 
-const Loading = () => {
+const Loading: React.FC = () => {
+  const animationContainer = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const animation = lottie.loadAnimation({
+      container: animationContainer.current!,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: process.env.PUBLIC_URL + '/animation_lkrnhzps.json'
+    });
+
+    return () => {
+      animation.destroy();
+    };
+  }, []);
+
   return (
-    <Spinner
-      thickness="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="blue.500"
-      size="xl"
-    />
+    <VStack>
+      <div ref={animationContainer} />
+      <Text fontSize="xl" mr={2}>
+        Loading model...
+      </Text>
+    </VStack>
   );
 };
+
 
 type InputWithPercentageProps = {
   title: string;
