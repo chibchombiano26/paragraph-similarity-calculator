@@ -1,8 +1,11 @@
 import { ChakraProvider, Box, Heading, Text, Button, Textarea } from "@chakra-ui/react";
-import { Pipeline, pipeline, cos_sim } from '@xenova/transformers';
+import { Pipeline, pipeline, cos_sim, env } from '@xenova/transformers';
 import { useEffect, useRef, useState } from "react";
 import { HStack, VStack } from '@chakra-ui/react'
 import lottie from 'lottie-web';
+
+// @ts-ignore
+env.allowLocalModels = false;
 
 
 const useCompareParagraphs = () => {
@@ -24,7 +27,7 @@ const useCompareParagraphs = () => {
 
   const loadModel = async () => {
     setLoadingModel(true);
-    modeRef.current = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    modeRef.current = await pipeline('feature-extraction');
     setLoadingModel(false);
   }
 
